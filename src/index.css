@@ -151,6 +151,46 @@
   font-weight: bolder;
   color: rgba(0, 218, 44, 0.81);
 }
+.summaryCard{
+  width: 100%;
+  max-width: 700px;
+
+  margin: 30px auto;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  background: #111827;
+
+  color: white;
+
+  line-height: 1.6;
+}.useCases {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.use {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  border: 1px solid #999;
+  border-radius: 10px;
+
+  background: rgb(100, 100, 100);
+  color:#fefefe;
+  cursor: pointer;
+  font-weight:600;
+}
+
+.use.selected {
+  border: 2px solid black;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;

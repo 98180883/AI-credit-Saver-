@@ -6,7 +6,8 @@ function App() {
     {
      model : "",
      plan : "",
-     users:""
+     users:"",
+     uses:[]
     }
   ]);
   //result 
@@ -26,7 +27,8 @@ function App() {
       {
         model : "",
      plan : "",
-     users:""
+     users:"",
+    uses:[]
       }
     ])
   }
@@ -55,6 +57,31 @@ const year_totalsave = results.reduce((total , r) => {
 },
 0
 )
+
+//usecases 
+const useCases = [
+  "coding",
+  "research",
+  "creativity",
+  "productivity",
+];
+//function to toggle uses
+
+   function toggleUse(index,use){
+    const updated = [...tools];
+    const currentuses = updated[index].uses;
+    //check if exist then delete
+    if(currentuses.includes(use)){
+      updated[index].uses = currentuses.filter(u => u!=use);
+    }
+    //add
+    else{
+      updated[index].uses= [...currentuses,use];
+    }
+
+  setTools(updated);
+   }
+
   return (
    <div>
      <div className="header"><p>Dont Overestimate for AI credits </p> 
@@ -62,7 +89,7 @@ const year_totalsave = results.reduce((total , r) => {
      </div>
       {tools.map((tool, index) => (
         <div key={index} className="inputField">
-       <p>{index+1}. </p>
+       <h3>{index+1}. </h3>
 
          <select
       value={tool.model}
@@ -92,8 +119,6 @@ const year_totalsave = results.reduce((total , r) => {
     >
          <option value="">Select Plan</option>
 
-  <option value="free">Free</option>
-
   <option value="pro">Pro</option>
 
   <option value="team">Team</option>
@@ -109,6 +134,41 @@ const year_totalsave = results.reduce((total , r) => {
         handleChange(index , "users" , e.target.value)
       }}
     />
+<div className="useCases">
+
+  {useCases.map((use) => (
+
+    <button
+      type="button"
+
+      key={use}
+
+      className={
+        tool.uses.includes(use)
+          ? "use selected"
+          : "use"
+      }
+
+      onClick={() => toggleUse(index, use)}
+    >
+
+      <span className="checkBox">
+
+        {
+          tool.uses.includes(use)
+            ? "✔"
+            : ""
+        }
+
+      </span>
+
+      {use}
+
+    </button>
+
+  ))}
+
+</div>
 
     <button id="delTool" onClick={() => delTool(index)}> Delete</button>
      </div>
@@ -118,7 +178,39 @@ const year_totalsave = results.reduce((total , r) => {
      <button id="addTool" onClick={addTool}>Add</button>
      <button id="analyzeBtn" onClick={()=>{
       const res = analyze(tools);
+<<<<<<< HEAD
       setResults(res)
+=======
+      setResults(res);
+      const monthlySavings = res.reduce((total, r) => {
+  return total + r.monthlysave;
+}, 0);
+
+const yearlySavings = res.reduce((total, r) => {
+  return total + r.yearlysave;
+}, 0);
+      const response = await fetch(
+ "http://localhost:5000/summary",
+
+ {
+   method: "POST",
+
+   headers: {
+     "Content-Type": "application/json"
+   },
+
+   body: JSON.stringify({
+
+     results: res,
+monthlySavings,
+yearlySavings
+   })
+ }
+);
+const data = await response.json();
+const summary = data.summary;
+setSummary(summary);
+>>>>>>> fe0bfbf (Improved recommendation logic based on usesof model and point based system based on use and plan price)
      }}>Analyze</button>
 
       <div className="total_savings">
@@ -133,7 +225,7 @@ const year_totalsave = results.reduce((total , r) => {
         <br />
         Plan : {r.plan}</h3>
         <div className="reco">
-       <p>Optimization : <span className="recommend"> {r.reco}</span>
+       <p>Recommendation : <span className="recommend"> {r.reco}</span>
         </p>
         <p>Monthly Savings :  <span className="savings">${r.monthlysave}</span>
         </p>
