@@ -45,6 +45,7 @@ const summary =
 chatCompletion.choices[0].message.content;
 //return json 
 res.json({
+  
  summary: summary
 });
     }
