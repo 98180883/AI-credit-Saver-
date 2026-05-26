@@ -1,20 +1,53 @@
-import { useState } from "react";
-import { analyze } from "./audit";
+import { useState , useEffect} from "react";
+import { analyze ,  analyzeOverall} from "./audit";
 import { pricingData } from "./pricingData";
 
+
+import {
+  FaArrowUp,
+  FaArrowDown
+} from "react-icons/fa";
+
 function App() {
-  const [tools, setTools] = useState([
-    {
-      model: "",
-      plan: "",
-      users: "",
-      uses: [],
-    },
-  ]);
+  //set tools 
+  const [tools, setTools] = useState(()=>{
+    const savedTools = localStorage.getItem("aiTools");
+    return savedTools 
+    ?(JSON.parse(savedTools))
+    :[
+       {
+          model: "",
+          plan: "",
+          users: "",
+          uses: [],
+        },
+    ]
+  });
 
   const [results, setResults] = useState([]);
-  const [priceBased, setPriceBased] = useState(false);
+  //set pricebased mode
+ const [priceBased, setPriceBased] = useState(() => {
+
+  const savedMode =
+    localStorage.getItem("priceMode");
+
+  return savedMode
+    ? JSON.parse(savedMode)
+    : false;
+
+});
   const [summary, setSummary] = useState("");
+//save tools to localstoarge
+
+useEffect(()=>{
+  localStorage.setItem("aiTools",JSON.stringify(tools));
+},[tools])
+
+//save pricemode to localstorage 
+
+useEffect(()=>{
+  localStorage.setItem("priceMode",JSON.stringify(priceBased));
+},[priceBased]);
 
   function handleChange(ind, field, value) {
     const updateTools = [...tools];
@@ -44,15 +77,15 @@ function App() {
     setResults(updatedResults);
   }
 
-  const mo_totalsave = results.reduce(
+  const mo_totalsave = Math.round(results.reduce(
     (total, r) => total + r.monthlysave,
     0
-  );
+  ));
 
-  const year_totalsave = results.reduce(
+  const year_totalsave = Math.round(results.reduce(
     (total, r) => total + r.yearlysave,
     0
-  );
+  ));
 
   const useCases = ["coding", "research", "creativity", "productivity"];
 
@@ -77,7 +110,14 @@ function App() {
           Use AI-Credit saver and save upto <span>$10000</span> monthly
         </p>
       </div>
-
+<div className="total_savings">
+        <h2>
+          Total Monthly Savings : <span>${mo_totalsave}</span>
+        </h2>
+        <h2>
+          Total Yearly Savings : <span>${year_totalsave}</span>
+        </h2>
+      </div>
       {tools.map((tool, index) => {
         const availablePlans = tool.model
           ? Object.keys(pricingData[tool.model])
@@ -150,15 +190,16 @@ function App() {
           </div>
         );
       })}
+<label className="priceLabel">
+  <input
+    type="checkbox"
+    className="pricebased"
+    checked={priceBased}
+    onChange={(e) => setPriceBased(e.target.checked)}
+  />
 
-      <label>
-        <input
-          type="checkbox"
-          checked={priceBased}
-          onChange={(e) => setPriceBased(e.target.checked)}
-        />
-        Optimize purely for lowest price
-      </label>
+  Optimize purely for lowest price
+</label>
 
       <button id="addTool" onClick={addTool}>
         Add
@@ -171,72 +212,102 @@ function App() {
             return (
               tool.model === "" ||
               tool.plan === "" ||
-              tool.users === ""
+              tool.users === ""||
+              tool.users === "0"
             );
           });
 
           if (hasEmptyField) {
-            alert("Please fill all fields");
+            alert("Please fill all fields with valid input ");
             return;
           }
 
-          const res = analyze(tools, priceBased);
-          setResults(res);
+          let finalResults =  [];
+          const overall = analyzeOverall(tools,priceBased);
+          if(overall){
+             finalResults = [overall];
+          }
+          else{
+             finalResults =
+      analyze(
+        tools,
+        priceBased
+      );
+          }
+          setResults(finalResults);
 
-          const monthlySavings = res.reduce(
+          const monthlySavings = finalResults.reduce(
             (total, r) => total + r.monthlysave,
             0
           );
 
-          const yearlySavings = res.reduce(
+          const yearlySavings = finalResults.reduce(
             (total, r) => total + r.yearlysave,
             0
           );
+const response = await fetch(
+  "http://localhost:5000/summary",
+  {
+    method: "POST",
 
-          await fetch("http://localhost:5000/summary", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              results: res,
-              monthlySavings,
-              yearlySavings,
-            }),
-          });
+    headers: {
+      "Content-Type":
+      "application/json",
+    },
 
-          const response = await fetch(
-            "http://localhost:5000/summary"
-          );
-          const data = await response.json();
-          setSummary(data.summary);
+    body: JSON.stringify({
+      results: finalResults,
+      monthlySavings,
+      yearlySavings,
+    }),
+  }
+);
+
+const data =
+await response.json();
+
+setSummary(data.summary);
         }}
       >
         Analyze
       </button>
 
-      <div className="total_savings">
-        <h2>
-          Total Monthly Savings : <span>${mo_totalsave}</span>
-        </h2>
-        <h2>
-          Total Yearly Savings : <span>${year_totalsave}</span>
-        </h2>
-      </div>
+      
 
       <div className="resultContainer">
         {results.map((r, index) => (
           <section key={index} className="result">
-            <h3>
-              Using : {r.model} {r.plan}
-            </h3>
-
+           <h3>Optimization report</h3>
             <div className="reco">
+            <p>
+             <strong> Current Spend : </strong>{" "}
+             <span className="currPrice">${r.currentPrice} </span>
+            </p>
               <p>
                 <strong>Recommendation:</strong>{" "}
                 <span className="recommend">{r.reco}</span>
               </p>
-
+               <p>
+             <strong> Optimized Spending : </strong>{" "}
+             <span className="recoPrice">${r.recoPrice} 
+            <span
+  className={
+    r.grade === "up"
+    ? "upIcon"
+    : "downIcon"
+  }
+>
+  {
+    r.grade === "up" &&
+    <FaArrowUp />
+  }
+  {
+    r.grade === "down" &&
+    <FaArrowDown />
+  }
+</span>
+    </span>
+            </p>
               <p>
                 <strong>Monthly Savings:</strong>{" "}
                 <span className="savings">
@@ -250,10 +321,30 @@ function App() {
                   ${r.yearlysave}
                 </span>
               </p>
+              <p>
+                <strong>Reason:</strong>{" "}
+                <span className="reason">
+                  {r.reason}
+                </span>
+              </p>
             </div>
+            
           </section>
         ))}
       </div>
+      {
+  summary && (
+
+    <div className="summaryCard">
+
+      <h2>AI Audit Summary</h2>
+
+      <p>{summary}</p>
+
+    </div>
+
+  )
+}
     </div>
   );
 }
