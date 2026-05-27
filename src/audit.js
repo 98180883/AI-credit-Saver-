@@ -130,6 +130,7 @@ function getRecommendationReason(
 }
 
 
+
 //fallback plan 
 function getFallbackPlan(model, users) {
 
@@ -327,7 +328,13 @@ export function analyze(tools, priceBased) {
       [currentPlan]
       .price;
 
-
+    //check if current plan valid
+   const currentPlanValid =
+   isvalidSize(
+    currentModel,
+    currentPlan,
+    users
+  );
     const currentScore =
       getValueScore(
         currentModel,
@@ -338,8 +345,9 @@ export function analyze(tools, priceBased) {
 
     // TRACK BEST OPTION
     let bestScore =
-      currentScore;
-
+       currentPlanValid
+    ? currentScore
+    : 0;
     let bestModel =
       currentModel;
 
@@ -347,7 +355,9 @@ export function analyze(tools, priceBased) {
       currentPlan;
 
     let bestPrice =
-      currentPrice;
+        currentPlanValid
+    ? currentPrice
+    : Infinity;
 
 
     
@@ -412,7 +422,7 @@ export function analyze(tools, priceBased) {
             // PRICE BASED MODE
             if (priceBased) {
 
-              if (price < bestPrice) {
+              if (price < bestPrice ) {
 
                 bestPrice = price;
 
@@ -461,11 +471,29 @@ export function analyze(tools, priceBased) {
           currentModel,
           users
         );
-      if (!fallbackPlan) {
+        // if fallback cant find any plan for selected number of users
+     if (!fallbackPlan) {
 
-  bestModel = currentModel;
-  bestPlan = currentPlan;
-    
+  results.push({
+
+    reco: "No valid plan found",
+
+    reason:
+      "No available plan supports your selected team size.",
+
+    monthlysave: 0,
+
+    yearlysave: 0,
+
+    currentPrice: currentPrice,
+
+    recoPrice: currentPrice,
+
+    grade: "same"
+
+  });
+
+  return;
 
 }
         else{
@@ -529,11 +557,6 @@ export function analyze(tools, priceBased) {
     ) {
 
       results.push({
-
-
-
-        currentModel : currentModel , 
-        currentPlan :currentPlan,
          reco:
           `${bestModel} ${bestPlan}`,
 

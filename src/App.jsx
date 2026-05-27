@@ -219,11 +219,19 @@ useEffect(()=>{
               tool.users === "0"
             );
           });
-
-          if (hasEmptyField) {
+           if (hasEmptyField) {
             alert("Please fill all fields with valid input ");
             return;
           }
+         const noUsesSelected = tools.some((tool) => {
+         return tool.uses.length === 0;
+         });
+
+         if (noUsesSelected && priceBased===false) {
+          alert("Please select at least one use case Or analyze in price based mode");
+              return;
+             }
+         
 
           let finalResults =  [];
           const overall = analyzeOverall(tools,priceBased);
