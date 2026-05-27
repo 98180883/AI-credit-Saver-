@@ -261,7 +261,7 @@ useEffect(()=>{
   setLoading(true);
 
   const response = await fetch(
-    "http://localhost:5000/summary",
+    "https://ai-credit-saver.onrender.com",
     {
       method: "POST",
 
