@@ -35,17 +35,21 @@
     transform: translateY(0);
   }
 }
-
+html{
+  min-height: 100%;
+}
 body {
   margin: 0;
-  background-color: var(--bg);
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--bg);
 }
 
 #root {
   width: 100%;
   max-width: 1100px;
   text-align: center;
-  min-height: 100vh;
+ min-height: 100vh;
   margin: 0 auto;
   box-sizing: border-box;
   padding: 20px 12px;
@@ -241,7 +245,7 @@ body {
   font-weight: 500;
   cursor: pointer;
   color: var(--text-h);
-  margin:8px;
+  margin:16px;
 }
 
 .pricebased {
@@ -261,7 +265,7 @@ body {
 
 .result {
   width: 100%;
-  max-width:480px;
+ max-width: 900px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -344,7 +348,7 @@ body {
 }
 .summaryCard {
   width: 100%;
-  max-width: 700px;
+  max-width: 900px;
   margin: 40px auto;
   padding: 28px;
   border-radius: 14px;
@@ -375,4 +379,109 @@ code {
   border-radius: 6px;
   color: var(--text-h);
   border: 1px solid var(--border);
+}
+
+.chartContainer{
+  width: 320px;
+  height: 320px;
+  margin: 20px auto;
+}
+.chartWrapper{
+  display: flex;
+ 
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;       
+  gap: 24px;                  
+  flex-wrap: nowrap;         
+  width: 100%;
+}
+.loader{
+  
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 12px;
+  background: none;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+.spinner {
+  margin: 20px auto;
+  border: 4px solid var(--border);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@media (max-width: 768px) {
+  .header p:first-child {
+    font-size: 28px; 
+  }
+
+  .total_savings {
+    flex-direction: column; 
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .inputField {
+    flex-direction: column; 
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .inputField h3 {
+    text-align: left;
+  }
+
+  .inputField select, 
+  .inputField input {
+    width: 100%; /* Spreads selection items over the full width of the mobile card */
+    box-sizing: border-box;
+  }
+
+  .useCases {
+    flex-wrap: wrap; /* Prevents tags from stretching out of bounds */
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .use {
+    flex: 1 1 calc(50% - 8px); /* Neatly organizes keywords into a balanced 2x2 grid */
+    justify-content: center;
+  }
+
+  #delTool {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .chartWrapper {
+    flex-direction: column-reverse; /* Places text details right above or below chart cleanly */
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .reco {
+    width: 100%;
+  }
+
+  .chartContainer {
+    width: 100%;
+    max-width: 280px; /* Scales down the pie chart cleanly so it stays in context frame */
+    height: 280px;
+    margin: 0 auto;
+  }
 }

@@ -1,7 +1,7 @@
 import { useState , useEffect} from "react";
 import { analyze ,  analyzeOverall} from "./audit";
 import { pricingData } from "./pricingData";
-
+import SavingsChart from "./chart";
 
 import {
   FaArrowUp,
@@ -36,6 +36,9 @@ function App() {
     : false;
 
 });
+//loading 
+const [loading,setLoading] = useState(false);
+//AI summary 
   const [summary, setSummary] = useState("");
 //save tools to localstoarge
 
@@ -118,6 +121,7 @@ useEffect(()=>{
           Total Yearly Savings : <span>${year_totalsave}</span>
         </h2>
       </div>
+      
       {tools.map((tool, index) => {
         const availablePlans = tool.model
           ? Object.keys(pricingData[tool.model])
@@ -198,9 +202,8 @@ useEffect(()=>{
     onChange={(e) => setPriceBased(e.target.checked)}
   />
 
-  Optimize purely for lowest price
+  Optimize only for lowest price
 </label>
-
       <button id="addTool" onClick={addTool}>
         Add
       </button>
@@ -245,39 +248,63 @@ useEffect(()=>{
             (total, r) => total + r.yearlysave,
             0
           );
-const response = await fetch(
-  "http://localhost:5000/summary",
-  {
-    method: "POST",
+         try {
 
-    headers: {
-      "Content-Type":
-      "application/json",
-    },
+  setLoading(true);
 
-    body: JSON.stringify({
-      results: finalResults,
-      monthlySavings,
-      yearlySavings,
-    }),
-  }
-);
+  const response = await fetch(
+    "http://localhost:5000/summary",
+    {
+      method: "POST",
 
-const data =
-await response.json();
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-setSummary(data.summary);
-        }}
+      body: JSON.stringify({
+        results: finalResults,
+        monthlySavings,
+        yearlySavings,
+      }),
+    }
+  );
+
+  const data = await response.json();
+
+  setSummary(data.summary);
+
+}
+catch (err) {
+
+  console.log("failed to generate AI summary");
+
+}
+finally {
+
+  setLoading(false);
+
+}
+        }
+      }
+
       >
         Analyze
       </button>
 
-      
+      {loading && (
+        <div className="loader"
+        >
+          <div className="spinner"></div>
+          Generating your personalized  audit summary Aof your AI setup
+        </div>
+        )}
 
       <div className="resultContainer">
         {results.map((r, index) => (
           <section key={index} className="result">
-           <h3>Optimization report</h3>
+             <h3>Optimization report</h3>
+             <div className="chartWrapper">
+          
             <div className="reco">
             <p>
              <strong> Current Spend : </strong>{" "}
@@ -289,14 +316,13 @@ setSummary(data.summary);
               </p>
                <p>
              <strong> Optimized Spending : </strong>{" "}
-             <span className="recoPrice">${r.recoPrice} 
+             <span className="recoPrice">${r.recoPrice} </span>
             <span
   className={
     r.grade === "up"
     ? "upIcon"
     : "downIcon"
-  }
->
+  }>
   {
     r.grade === "up" &&
     <FaArrowUp />
@@ -306,7 +332,7 @@ setSummary(data.summary);
     <FaArrowDown />
   }
 </span>
-    </span>
+    
             </p>
               <p>
                 <strong>Monthly Savings:</strong>{" "}
@@ -328,7 +354,11 @@ setSummary(data.summary);
                 </span>
               </p>
             </div>
-            
+         <SavingsChart 
+            currentSpend={r.currentPrice}
+            optimizedSpend={r.recoPrice}
+            savings={r.monthlysave}/>
+            </div>
           </section>
         ))}
       </div>
