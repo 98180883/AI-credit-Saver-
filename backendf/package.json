@@ -1,15 +1,18 @@
 {
-  "name": "reactpractice-backend",
+  "name": "ai-credit-saver-backend",
   "version": "1.0.0",
   "type": "commonjs",
   "main": "serverback.js",
   "scripts": {
     "start": "node serverback.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "groq-sdk": "^0.3.0"
   }
 }
