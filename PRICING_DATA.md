@@ -1,0 +1,1 @@
+## Pricing Data were roughly collected from google gemini and official websites of the AI platforms . the data is not 100% accurate but it is close enough to give a good recommendation and optimization to the users .
