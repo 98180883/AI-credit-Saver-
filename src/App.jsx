@@ -299,13 +299,7 @@ finally {
         Analyze
       </button>
 
-      {loading && (
-        <div className="loader"
-        >
-          <div className="spinner"></div>
-          Generating your personalized  audit summary Aof your AI setup
-        </div>
-        )}
+    
 
       <div className="resultContainer">
         {results.map((r, index) => (
@@ -370,6 +364,14 @@ finally {
           </section>
         ))}
       </div>
+      
+        {loading && (
+        <div className="loader"
+        >
+          <div className="spinner"></div>
+          Generating your personalized  audit summary  to optimize your AI setup
+        </div>
+        )}
       {
   summary && (
 
