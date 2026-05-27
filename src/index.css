@@ -256,16 +256,17 @@ body {
 }
 
 .resultContainer {
+  width: 100%;
+ max-width:900px;
   display: flex;
   justify-content: center;
   gap: 24px;
   flex-wrap: wrap;
-  margin-top: 40px;
+  margin: 40px auto;
+  
 }
 
 .result {
-  width: 100%;
- max-width: 900px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -348,9 +349,9 @@ body {
 }
 .summaryCard {
   width: 100%;
-  max-width: 900px;
+  max-width:900px;
   margin: 40px auto;
-  padding: 28px;
+  padding: 16px;
   border-radius: 14px;
   background: var(--panel-bg);
   border: 1px solid var(--border);
@@ -430,12 +431,14 @@ code {
   }
 
   .total_savings {
+    max-width: 260px;
     flex-direction: column; 
     gap: 16px;
-    padding: 16px;
+    padding: 24px;
   }
 
   .inputField {
+    width:95%;
     flex-direction: column; 
     align-items: stretch;
     gap: 12px;
@@ -448,18 +451,18 @@ code {
 
   .inputField select, 
   .inputField input {
-    width: 100%; /* Spreads selection items over the full width of the mobile card */
+    width: 100%; 
     box-sizing: border-box;
   }
 
   .useCases {
-    flex-wrap: wrap; /* Prevents tags from stretching out of bounds */
+    flex-wrap: wrap; 
     justify-content: flex-start;
     gap: 8px;
   }
 
   .use {
-    flex: 1 1 calc(50% - 8px); /* Neatly organizes keywords into a balanced 2x2 grid */
+    flex: 1 1 calc(50% - 8px); 
     justify-content: center;
   }
 
@@ -467,21 +470,32 @@ code {
     width: 100%;
     margin-top: 4px;
   }
-
+ .resultContainer {
+     width:100%;
+    padding: 10px;
+    
+  }
   .chartWrapper {
-    flex-direction: column-reverse; /* Places text details right above or below chart cleanly */
+  
+    flex-direction: column; 
     flex-wrap: wrap;
     gap: 20px;
   }
 
   .reco {
-    width: 100%;
+    width: 95%;
   }
 
   .chartContainer {
-    width: 100%;
-    max-width: 280px; /* Scales down the pie chart cleanly so it stays in context frame */
+    width:95%;
+    max-width: 280px; 
     height: 280px;
     margin: 0 auto;
+  }
+  .summaryCard {
+    margin: auto;
+    width:95%;
+    padding: 10px;
+    overflow-x:none;
   }
 }

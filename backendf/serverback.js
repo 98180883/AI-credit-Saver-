@@ -35,7 +35,7 @@ respond with:
 
 If no savings are identified BUT the recommended model or plan is different from the current setup,
 explain that the recommendation is a better fit for the user's team size and selected use cases.
-
+If  No valid plan found mention we could not found any valid plan for your team size ! 
 Do NOT mention:
 - Monthly savings: $0
 - Yearly savings: $0
