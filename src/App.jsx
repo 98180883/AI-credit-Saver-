@@ -304,7 +304,7 @@ finally {
       <div className="resultContainer">
         {results.map((r, index) => (
           <section key={index} className="result">
-             <h3>Optimizat report</h3>
+             <h3>Optimization report</h3>
              <div className="chartWrapper">
           
             <div className="reco">
