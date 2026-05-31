@@ -18,7 +18,7 @@ function SavingsChart({
 const data = {
 
   labels: [
-   "optimizedSpend" ,"savings" 
+   "Optimized-spend" ,"Savings" 
   ],
 
 datasets: [

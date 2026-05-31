@@ -369,7 +369,7 @@ finally {
         <div className="loader"
         >
           <div className="spinner"></div>
-          Generating your personalized  audit summary  to optimize your AI setup
+          Generating your personalized AI audit summary
         </div>
         )}
       {
