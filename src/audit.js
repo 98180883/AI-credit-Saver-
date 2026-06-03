@@ -273,7 +273,7 @@ const yearlysave =
     `${bestModel} ${bestPlan}`,
 
   reason:
-    `${bestModel} ${bestPlan} can handle your usage requirements more efficiently than your current multi model setup  while also generating a monthly savings of $${monthlysave}`,
+    `${bestModel} ${bestPlan} can handle your usage requirements more efficiently than your current AI setup  while also generating a monthly savings of $${monthlysave}`,
 
   monthlysave:
     Math.round(monthlysave),

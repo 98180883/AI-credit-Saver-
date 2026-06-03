@@ -12,7 +12,14 @@ import {
   FaArrowUp,
   FaArrowDown
 } from "react-icons/fa";
-
+import { FaFileDownload } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
+import {IoMdAddCircle } from "react-icons/io";
+import { IoAnalyticsSharp } from "react-icons/io5";
+import { MdBolt } from "react-icons/md";
+import {MdDeleteOutline } from "react-icons/md";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import { IoMdCheckbox } from "react-icons/io";
 function App() {
   //set tools 
   const [tools, setTools] = useState(()=>{
@@ -164,7 +171,7 @@ async function exportPdf() {
       <div className="header">
 
   <div className="headerTitle">
-    <span>AI-Spend Optimizer</span>
+    <span><MdBolt className="headerIcon"/> AI-Spend Optimizer</span>
 
     <p>Don't Overestimate for AI Credits</p>
   </div>
@@ -174,6 +181,7 @@ async function exportPdf() {
   </p>
 
 </div>
+{results.length>0 &&
 <div className="total_savings">
         <h2>
           Total Monthly Savings : <span>${mo_totalsave}</span>
@@ -182,7 +190,7 @@ async function exportPdf() {
           Total Yearly Savings : <span>${year_totalsave}</span>
         </h2>
       </div>
-      
+}
       {tools.map((tool, index) => {
         const availablePlans = tool.model
           ? Object.keys(pricingData[tool.model])
@@ -231,7 +239,7 @@ async function exportPdf() {
             />
 
             <div className="useCases">
-              {useCases.map((use) => (
+              { useCases.map((use) => (
                 <button
                   key={use}
                   type="button"
@@ -242,16 +250,16 @@ async function exportPdf() {
                   }
                   onClick={() => toggleUse(index, use)}
                 >
-                  <span className="checkBox">
-                    {tool.uses.includes(use) ? "✔" : ""}
-                  </span>
+                  
+                   {tool.uses.includes(use) ? <IoMdCheckbox />:  <MdCheckBoxOutlineBlank/>}
+                  
                   {use}
                 </button>
               ))}
             </div>
 
             <button id="delTool" onClick={() => delTool(index)}>
-              Delete
+              Delete <MdDeleteOutline className="icons"/>
             </button>
           </div>
         );
@@ -267,7 +275,7 @@ async function exportPdf() {
   Optimize only for lowest price
 </label>
       <button id="addTool" onClick={addTool}>
-        Add
+        Add <IoMdAddCircle className="icons"/>
       </button>
 
       <button
@@ -369,7 +377,7 @@ finally {
       }
 
       >
-        Analyze
+      <IoAnalyticsSharp className="icons"/> Analyze
       </button>
  
  {
@@ -380,6 +388,7 @@ finally {
  }
    
 
+    {results.length>0 &&
       <div className="resultContainer">
         {results.map((r, index) => (
           <section key={index} 
@@ -438,7 +447,7 @@ finally {
                 </span>
               </p>
                 <button className="downloadBtn" onClick={exportPdf}>
-                 Download AI-Powered Optimization Report 
+                <FaFileDownload className="Icon"/> Download AI-Powered Optimization Report 
                  </button>
             </div>
          <SavingsChart 
@@ -450,14 +459,15 @@ finally {
           </section>
         ))}
       </div>
-       
-        {loading && (
+}      
+        {loading && !summary && (
         <div className="loader"
         >
           <div className="spinner"></div>
           Generating your personalized AI audit summary
         </div>
         )}
+      
       {
   summary && (
 
@@ -470,10 +480,10 @@ finally {
     </div>
 
   )
-}
-<button className="historyBtn" onClick={()=>setshowHist(!showHist)}>{
-  showHist?"Hide History" : "Show History"
-  }</button>
+}<button className="historyBtn" onClick={() => setshowHist(!showHist)}>
+  <FaHistory className="icons" />
+  <span>{showHist ? "Hide History" : "History"}</span>
+</button>
         {
         showHist && (<div className="histSection">
            
@@ -487,7 +497,7 @@ finally {
                  <span className="setup">Optimized AI setup :</span> <span className="model">{audit.results[0].reco}</span>
                   </p>
                 <p>
-                  <span className="setup">Month Savings: </span> <span className="savings">${audit.monthlySavings}</span>
+                  <span className="setup">Monthly Savings: </span> <span className="savings">${audit.monthlySavings}</span>
                   </p>
                   <p>
                    <span className="setup">Yearly Savings :</span> <span className="savings">${audit.yearlySavings}</span> 
@@ -513,7 +523,10 @@ finally {
                  {audit.tools.map((tool,index)=>(
                  <div key={index}>
                  <p>
-                  <span className="setup">Model: </span> <span className="model">{tool.model} {tool.plan} ({tool.users} users) </span>
+                  <span className="setup">Model: </span> 
+                  <span className="model">
+                    {tool.model} {tool.plan}
+                     ({tool.users} users) </span>
                 </p>
 
                 <p>

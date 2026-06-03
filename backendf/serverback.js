@@ -19,7 +19,31 @@ app.post("/summary",async(req,res)=>{
  
     //prompt
     const prompt = `
-just tell hello
+Generate a customized AI spend audit summary in simple professional language.
+Important Rules :
+Keep the response under 80 words. !Important
+Do not explain the same benefit twice.
+
+Sample response :
+- savings amount
+- recommended model and plan
+- why the recommendation is useful in 1-2 small sentence
+
+Do NOT include the phrase:
+"Your AI spend audit summary"
+
+If no savings are identified AND the recommendation is already optimized,
+respond with:
+"Your current AI spending already appears optimized."
+
+If no savings are identified but the recommended model or plan is different from the current setup,
+explain that the recommendation is a better fit for the user's team size and selected use cases.
+
+If no valid plan is found, respond ONLY with:
+"We could not find a valid plan for your team size."
+Do NOT mention in any cases:
+- Monthly savings: $0
+- Yearly savings: $0
 
 Monthly savings:
 $${monthlySavings}
@@ -35,17 +59,14 @@ ${results.map(r => r.currentPlan).join(", ")}
 
 Recommendations:
 ${results.map(r => r.reco).join(", ")}
+
+Reasons:
+${results.map(r => r.reason).join(", ")}
+
 `;
 //send to AI
 const chatCompletion = await groq.chat.completions.create({
  messages: [
-    {
-    role: "system",
-    content: `You write AI audit summaries.
-Maximum 30 words.
-Maximum 2 sentences.
-Never exceed 30 words.`
-  },
   {
     role: "user",
     content: prompt
