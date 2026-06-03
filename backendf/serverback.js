@@ -33,8 +33,9 @@ If no savings are identified AND the recommendation is already optimized,
 respond with:
 "Your current AI spending already appears optimized."
 
-If no savings are identified BUT the recommended model or plan is different from the current setup,
+If no savings are identified but the recommended model or plan is different from the current setup,
 explain that the recommendation is a better fit for the user's team size and selected use cases.
+
 If  No valid plan found mention we could not found any valid plan for your team size ! 
 Do NOT mention:
 - Monthly savings: $0
@@ -58,7 +59,7 @@ ${results.map(r => r.reco).join(", ")}
 Reasons:
 ${results.map(r => r.reason).join(", ")}
 
-Keep the response under 100 words.
+Keep the response under 150 words.
 `;
 //send to AI
 const chatCompletion = await groq.chat.completions.create({
@@ -92,5 +93,5 @@ res.json({
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running `);
 });

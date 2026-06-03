@@ -2,6 +2,11 @@ import { useState , useEffect} from "react";
 import { analyze ,  analyzeOverall} from "./audit";
 import { pricingData } from "./pricingData";
 import SavingsChart from "./chart";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+
 
 import {
   FaArrowUp,
@@ -40,17 +45,34 @@ function App() {
 const [loading,setLoading] = useState(false);
 //AI summary 
   const [summary, setSummary] = useState("");
-//save tools to localstoarge
 
+//history button state toggle 
+const [showHist ,setshowHist] = useState(false)
+//history using localstoage 
+const [lastreports , setlastReports] = useState(()=>{
+  const savedReports = localStorage.getItem("reportHist");
+  return savedReports ? JSON.parse(savedReports) : []
+})
+//open and close history cards details 
+const [openCards,setopenCards]=useState({});
+//error message 
+const [errMsg,seterrMsg]=useState("");
+//save tools to localstoarge
 useEffect(()=>{
   localStorage.setItem("aiTools",JSON.stringify(tools));
 },[tools])
 
 //save pricemode to localstorage 
-
 useEffect(()=>{
   localStorage.setItem("priceMode",JSON.stringify(priceBased));
 },[priceBased]);
+
+//save report history to localstoarge
+useEffect(()=>{
+  localStorage.setItem("reportHist",JSON.stringify(lastreports));
+},[lastreports]);
+
+
 
   function handleChange(ind, field, value) {
     const updateTools = [...tools];
@@ -104,15 +126,54 @@ useEffect(()=>{
 
     setTools(updated);
   }
+//pdf export 
+const reportRef = useRef();
+
+async function exportPdf() {
+  //if null
+  
+
+  const canvsObject = await html2canvas(reportRef.current);
+  const imgData = canvsObject.toDataURL("image/png");
+  const newPdf = new jsPDF({orientation: "landscape"});
+
+  const pageWidth = newPdf.internal.pageSize.getWidth();
+  const pageHeight = newPdf.internal.pageSize.getHeight();
+
+  const imgWidth = pageWidth;
+  //maintain aspect ratio
+  const imgHeight = (canvsObject.height * imgWidth) / canvsObject.width;
+  const y =(pageHeight - imgHeight) / 2;
+
+  newPdf.addImage(
+  imgData,
+  "PNG",
+  0,
+  y,
+  imgWidth,
+  imgHeight
+);
+ newPdf.save("AI-Cost-Saver-Report.pdf");
+}
+
+
 
   return (
-    <div>
+    <div className="main">
+      
       <div className="header">
-        <p>Dont Overestimate for AI credits</p>
-        <p>
-          Use AI-Credit saver and save upto <span>$10000</span> monthly
-        </p>
-      </div>
+
+  <div className="headerTitle">
+    <span>AI-Spend Optimizer</span>
+
+    <p>Don't Overestimate for AI Credits</p>
+  </div>
+
+  <p>
+    Use AI-Credit Saver and save up to <span>$10000</span> monthly
+  </p>
+
+</div>
 <div className="total_savings">
         <h2>
           Total Monthly Savings : <span>${mo_totalsave}</span>
@@ -128,6 +189,7 @@ useEffect(()=>{
           : [];
 
         return (
+          
           <div key={index} className="inputField">
             <h3>{index + 1}.</h3>
 
@@ -211,6 +273,7 @@ useEffect(()=>{
       <button
         id="analyzeBtn"
         onClick={async () => {
+          seterrMsg("");
           const hasEmptyField = tools.some((tool) => {
             return (
               tool.model === "" ||
@@ -220,7 +283,7 @@ useEffect(()=>{
             );
           });
            if (hasEmptyField) {
-            alert("Please fill all fields with valid input ");
+            seterrMsg("Please fill all fields with valid input ");
             return;
           }
          const noUsesSelected = tools.some((tool) => {
@@ -228,7 +291,7 @@ useEffect(()=>{
          });
 
          if (noUsesSelected && priceBased===false) {
-          alert("Please select at least one use case Or analyze in price based mode");
+         seterrMsg("Please select at least one use case Or analyze in price based mode");
               return;
              }
          
@@ -245,9 +308,7 @@ useEffect(()=>{
         priceBased
       );
           }
-          setResults(finalResults);
-
-          const monthlySavings = finalResults.reduce(
+           const monthlySavings = finalResults.reduce(
             (total, r) => total + r.monthlysave,
             0
           );
@@ -256,6 +317,18 @@ useEffect(()=>{
             (total, r) => total + r.yearlysave,
             0
           );
+          setResults(finalResults);
+          setlastReports(prev=>[{
+            date : new Date().toLocaleString(),
+            tools:[...tools],
+            results:finalResults,
+            monthlySavings,
+            yearlySavings
+          },
+        ...prev
+      ].slice(0,3));
+
+         
          try {
 
   setLoading(true);
@@ -298,12 +371,21 @@ finally {
       >
         Analyze
       </button>
-
-    
+ 
+ {
+  errMsg && 
+  <div className="errMsg">
+    <p>{errMsg}</p>
+  </div>
+ }
+   
 
       <div className="resultContainer">
         {results.map((r, index) => (
-          <section key={index} className="result">
+          <section key={index} 
+          className="result"
+           ref = {index===0 ? reportRef : null}>
+            
              <h3>Optimization report</h3>
              <div className="chartWrapper">
           
@@ -355,16 +437,20 @@ finally {
                   {r.reason}
                 </span>
               </p>
+                <button className="downloadBtn" onClick={exportPdf}>
+                 Download AI-Powered Optimization Report 
+                 </button>
             </div>
          <SavingsChart 
             currentSpend={r.currentPrice}
             optimizedSpend={r.recoPrice}
             savings={r.monthlysave}/>
             </div>
+            
           </section>
         ))}
       </div>
-      
+       
         {loading && (
         <div className="loader"
         >
@@ -385,6 +471,71 @@ finally {
 
   )
 }
+<button className="historyBtn" onClick={()=>setshowHist(!showHist)}>{
+  showHist?"Hide History" : "Show History"
+  }</button>
+        {
+        showHist && (<div className="histSection">
+           
+           {lastreports.map((audit,index)=>(
+       <div key={index} className="histCard">
+                <p>
+                  Date : {audit.date}
+                </p>
+               
+                 <p>
+                 <span className="setup">Optimized AI setup :</span> <span className="model">{audit.results[0].reco}</span>
+                  </p>
+                <p>
+                  <span className="setup">Month Savings: </span> <span className="savings">${audit.monthlySavings}</span>
+                  </p>
+                  <p>
+                   <span className="setup">Yearly Savings :</span> <span className="savings">${audit.yearlySavings}</span> 
+                  </p>
+                 <button 
+                 className="showDetailsBtn" 
+                 onClick={()=>{
+                  setopenCards(prev=>({
+                    ...prev,
+                    [index]:!prev[index]
+                  }))
+                 }}
+                 >
+                  {
+                    openCards[index] 
+                    ? "Hide details"
+                    :"Show details"
+                  }
+                 </button>
+                 {openCards[index] && (
+                   <div className="currentSetup">
+                 <h4>Current Setup :</h4>
+                 {audit.tools.map((tool,index)=>(
+                 <div key={index}>
+                 <p>
+                  <span className="setup">Model: </span> <span className="model">{tool.model} {tool.plan} ({tool.users} users) </span>
+                </p>
+
+                <p>
+               <span className="setup">Uses: </span>{tool.uses.join(", ")}
+                </p>
+                <p>
+                <span className="setup">Current Spending: </span> <span className="currSpend">${audit.results[0].currentPrice} </span>  
+                </p>
+                <p>
+                 <span className="setup">Optimized Spending: </span> <span className="savings">${audit.results[0].recoPrice}  </span> 
+                </p>
+          
+         </div>
+  ))}
+</div>
+                 )}
+               </div>
+           ))}
+           
+          </div>
+          )
+          }
     </div>
   );
 }
