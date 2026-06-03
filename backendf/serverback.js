@@ -21,13 +21,14 @@ app.post("/summary",async(req,res)=>{
     const prompt = `
 Generate a customized AI spend audit summary in simple professional language.
 Important Rules :
-Keep the response under 80 words. !Important
-Do not explain the same benefit twice.
+Keep the response under 100 words. 
 
-Sample response :
-- savings amount
-- recommended model and plan
-- why the recommendation is useful in 1-2 small sentence
+Mention : 
+---Monthly Savings 
+---Yearly Savings 
+---Why it fits the team better  
+
+Do not explain the same benefit twice.
 
 Do NOT include the phrase:
 "Your AI spend audit summary"
@@ -41,6 +42,7 @@ explain that the recommendation is a better fit for the user's team size and sel
 
 If no valid plan is found, respond ONLY with:
 "We could not find a valid plan for your team size."
+
 Do NOT mention in any cases:
 - Monthly savings: $0
 - Yearly savings: $0
