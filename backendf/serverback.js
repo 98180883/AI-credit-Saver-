@@ -26,7 +26,7 @@ Keep the response under 100 words.
 Mention : 
 ---Monthly Savings 
 ---Yearly Savings 
----Why it fits the team better  
+---Why it fits the team better & cost efficient 
 
 Do not explain the same benefit twice.
 
@@ -76,7 +76,7 @@ const chatCompletion = await groq.chat.completions.create({
  ],
 
  model: "llama-3.3-70b-versatile",
- max_tokens: 40
+ 
 });
 //extract ai summary
 const summary =
