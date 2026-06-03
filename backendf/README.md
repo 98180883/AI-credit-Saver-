@@ -2,46 +2,40 @@
 
 AI Credit Saver helps users optimize their AI subscription spending by comparing different AI tools, plans, pricing, capabilities, and team sizes.
 
-It analyzes whether a user is overspending and recommends a more cost-efficient and higher-value AI setup . It provides a clear breakdown of potential savings and better plan suggestions based on the user's specific use cases and team requirements. It also offers unified AI stack recommendation instead overspending on mutiple AI tools resulting to better cost-efficiency.
+It analyzes whether the user is overspending for this current AI setup and recommends a more cost-efficient and higher-value AI setup . It provides a clear breakdown of potential savings and better plan suggestions based on the user's specific use cases and team requirements. It also offers unified AI stack recommendation instead overspending on mutiple AI tools resulting to better cost-efficiency.
 
 Live Site : https://ai-costoptimizer.netlify.app/
 ---
 
-# Features
+## Features
 
-- Compare multiple AI platforms:
-  - ChatGPT
-  - Claude
-  - Copilot
-  - Cursor
-  - Perplexity
+* AI Spend Analysis– Analyze current AI subscriptions based on team size, plans, and use cases.
 
-- Analyze:
-  - Monthly spending
-  - Yearly spending
-  - Capability score
-  - Value score
-  - Team size compatibility
+*Dual Optimization Modes
 
-- Two optimization modes:
-  - Best Value Mode
-  - Lowest Price Mode
+  * **Best Value Mode** – Recommends plans that balance cost and capability.
+  * **Lowest Price Mode** – Prioritizes minimizing subscription costs.
 
-- Smart recommendations:
-  - Better plan suggestions
-  - Unified AI stack recommendations
+* **Unified AI Recommendations** – Identifies opportunities to replace expensive multi-model setups with a single, more cost-effective solution.
 
-- Interactive savings visualization using charts
+* **Monthly & Yearly Savings Estimation** – Calculates potential cost reductions from recommended changes.
 
-- AI-generated optimization summary
+* **AI-Powered Audit Summary** – Generates a concise explanation of recommendations and expected savings.
 
-- Persistent input form data using LocalStorage
+* **Optimization Reports** – Displays detailed spending comparisons, recommendations, and savings breakdowns.
 
-- Pdf export of optimization summary and recommendations
+* **PDF Export** – Download optimization reports for future reference .
 
-- Responsive design for desktop and mobile devices
+* **Audit History Tracking** – Stores 3 recent optimization reports locally for quick access.
 
-- Last 3 recommendations stored in LocalStorage for user reference
+* **Current vs Optimized Cost Visualization** – Interactive charts for comparing existing and recommended spending.
+
+* **Local Storage Persistence** – Automatically saves user inputs, settings, and audit history.
+
+* **Responsive Design** – Fully optimized for desktop, tablet, and mobile devices.
+
+* **Real-Time Validation** – Prevents incomplete or invalid submissions before analysis.
+
 ---
 
 # Tech Stack
@@ -68,7 +62,7 @@ Live Site : https://ai-costoptimizer.netlify.app/
 ## Clone Repository
 
 ```bash
-git clone <your-repo-link>
+git clone <https://github.com/98180883/AI-credit-Saver->
 cd ai-credit-saver
 ```
 
