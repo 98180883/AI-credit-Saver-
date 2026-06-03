@@ -5,6 +5,7 @@ AI Credit Saver helps users optimize their AI subscription spending by comparing
 It analyzes whether a user is overspending and recommends a more cost-efficient or higher-value AI setup.Also provides unified AI stack recommendations for better productivity and cost savings. The app uses a score-based system to evaluate the best options based on user needs and budget. Also guide users to identify invalid team-size selections and suggest optimal plans accordingly. It also visualizes potential savings with interactive charts and provides an AI-generated summary of optimization recommendations.
 
 ---
+# Live Site : https://ai-costoptimizer.netlify.app/
 
 # Features
 
@@ -62,7 +63,7 @@ It analyzes whether a user is overspending and recommends a more cost-efficient 
 ## Clone Repository
 
 ```bash
-git clone <your-repo-link>
+git clone <https://github.com/98180883/AI-credit-Saver->
 cd ai-credit-saver
 ```
 
