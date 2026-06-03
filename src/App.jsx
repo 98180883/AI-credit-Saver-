@@ -191,16 +191,16 @@ async function exportPdf() {
         </h2>
       </div>
 }
+ <h3>Tell us about your current AI setup</h3>
+
       {tools.map((tool, index) => {
         const availablePlans = tool.model
           ? Object.keys(pricingData[tool.model])
           : [];
 
         return (
-          
-          <div key={index} className="inputField">
-            <h3>{index + 1}.</h3>
-
+         <div key={index} className="inputField">
+            
             <select
               value={tool.model}
               onChange={(e) =>
@@ -262,7 +262,9 @@ async function exportPdf() {
               Delete <MdDeleteOutline className="icons"/>
             </button>
           </div>
+        
         );
+       
       })}
 <label className="priceLabel">
   <input

@@ -4,6 +4,7 @@ AI Credit Saver helps users optimize their AI subscription spending by comparing
 
 It analyzes whether a user is overspending and recommends a more cost-efficient and higher-value AI setup . It provides a clear breakdown of potential savings and better plan suggestions based on the user's specific use cases and team requirements. It also offers unified AI stack recommendation instead overspending on mutiple AI tools resulting to better cost-efficiency.
 
+Live Site : https://ai-costoptimizer.netlify.app/
 ---
 
 # Features
@@ -36,6 +37,11 @@ It analyzes whether a user is overspending and recommends a more cost-efficient 
 
 - Persistent input form data using LocalStorage
 
+- Pdf export of optimization summary and recommendations
+
+- Responsive design for desktop and mobile devices
+
+- Last 3 recommendations stored in LocalStorage for user reference
 ---
 
 # Tech Stack
@@ -50,7 +56,12 @@ It analyzes whether a user is overspending and recommends a more cost-efficient 
 - Node.js
 - Express
 
+## Deployment
+- Vercel (Frontend)
+- Render (Backend)
+
 ---
+
 
 # Installation
 
@@ -199,7 +210,6 @@ Better pricing and stronger overall value for selected use cases.
 - Authentication
 - Cloud database
 - Real AI pricing APIs
-- PDF export
 - Usage analytics
 
 
